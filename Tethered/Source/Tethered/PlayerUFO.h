@@ -25,17 +25,19 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void MoveUFO(float xAxis, float yAxis, float deltaSeconds);
-
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float UFOSpeed;
 
+	void MoveUFO(float XAxis, float YAxis, float DeltaTime);
+
+	static const FName XAxisMovementUFO1;
+	static const FName YAxisMovementUFO1;
+	static const FName XAxisMovementUFO2;
+	static const FName YAxisMovementUFO2;
 
 private:
-	float XAxisUFO;
-	float YAxisUFO;
+	float XAxisValue;
+	float YAxisValue;
 
-	
 	
 };
