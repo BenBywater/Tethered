@@ -26,18 +26,21 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	float UFOSpeed;
+	float UFOSpeed = 1000;
 
-	void MoveUFO(float XAxis, float YAxis, float DeltaTime);
+	void MoveUFO();
 
 	static const FName XAxisMovementUFO1;
 	static const FName YAxisMovementUFO1;
 	static const FName XAxisMovementUFO2;
 	static const FName YAxisMovementUFO2;
 
-private:
-	float XAxisValue;
-	float YAxisValue;
+	void SetX(float x);
+	void SetY(float y);
 
-	
+private:
+	float XAxisValueUFO;
+	float YAxisValueUFO;
+
+	UStaticMeshComponent* UFOMeshComponent;
 };

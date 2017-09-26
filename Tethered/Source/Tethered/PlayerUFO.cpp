@@ -10,11 +10,19 @@ const FName APlayerUFO::YAxisMovementUFO2("YAxisMovementUFO2");
 
 // Sets default values
 APlayerUFO::APlayerUFO():
-	XAxisValue(0.f),
-	YAxisValue(0.f)
+	XAxisValueUFO(0.f),
+	YAxisValueUFO(0.f),
+	UFOMeshComponent(NULL)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/UFO/TwinStickUFO"));
+	// Create the mesh component
+	UFOMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UFO"));
+	RootComponent = UFOMeshComponent;
+	UFOMeshComponent->SetSimulatePhysics(true);
+	UFOMeshComponent->SetStaticMesh(ShipMesh.Object);
 
 }
 
@@ -29,51 +37,39 @@ void APlayerUFO::BeginPlay()
 void APlayerUFO::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	if (GetName().Contains("UFO1"))
-	{
-		XAxisValue = GetInputAxisValue(XAxisMovementUFO1);
-		YAxisValue = GetInputAxisValue(YAxisMovementUFO1);
-		MoveUFO(XAxisValue, YAxisValue, DeltaTime);
-	}
-	else if (GetName().Contains("UFO2"))
-	{
-		XAxisValue = GetInputAxisValue(XAxisMovementUFO2);
-		YAxisValue = GetInputAxisValue(YAxisMovementUFO2);
-		MoveUFO(XAxisValue, YAxisValue, DeltaTime);
-	}
 }
 
 // Called to bind functionality to input
 void APlayerUFO::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
-	// Bind player inputs
-	if (PlayerInputComponent != NULL)
-	{
-		PlayerInputComponent->BindAxis(XAxisMovementUFO1);
-		PlayerInputComponent->BindAxis(YAxisMovementUFO1);
-		PlayerInputComponent->BindAxis(XAxisMovementUFO2);
-		PlayerInputComponent->BindAxis(YAxisMovementUFO2);
-	}
 }
 
-void APlayerUFO::MoveUFO(float XAxis, float YAxis, float DeltaTime)
+void APlayerUFO::MoveUFO()
 {
 	// Clamp max size so that (X=1, Y=1) doesn't cause faster movement in diagonal directions
-	const FVector MoveDirection = FVector(YAxisValue, XAxisValue, 0.f).GetClampedToMaxSize(1.0f);
+	const FVector MoveDirection = FVector(YAxisValueUFO, XAxisValueUFO, 0.f).GetClampedToMaxSize(1.0f);
 
 	// Calculate movement based on direction, speed of player and frame rate dependancy
-	const FVector Movement = MoveDirection * UFOSpeed * DeltaTime;
-
+	const FVector Movement = MoveDirection * UFOSpeed * GetWorld()->DeltaTimeSeconds;
+	//UE_LOG(LogTemp, Warning, TEXT("Movement.X %f, Movement.Y %f"), Movement.X, Movement.Y);
 	// If player is moving
 	if (Movement.SizeSquared() > 0.0f)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Movement.X = %f Movement.Y = %f"), Movement.X, Movement.Y);
+		//UE_LOG(LogTemp, Warning, TEXT("if (Movement.SizeSquared() > 0.0f)"));
 		// calculate rotation
 		const FRotator NewRotation = Movement.Rotation();
 		// move player UFO
-		RootComponent->MoveComponent(Movement, NewRotation, false);
+		UFOMeshComponent->MoveComponent(Movement, NewRotation, false);
 	}
+}
+
+void APlayerUFO::SetX(float XAxis)
+{
+	XAxisValueUFO = XAxis;
+}
+
+void APlayerUFO::SetY(float YAxis)
+{
+	YAxisValueUFO = YAxis;
 }
