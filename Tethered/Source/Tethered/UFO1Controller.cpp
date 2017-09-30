@@ -1,22 +1,36 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tethered.h"
+#include "CableComponent.h"
 #include "PlayerUFO.h"
 #include "UFO1Controller.h"
 
+AUFO1Controller::AUFO1Controller():
+	UFOPawn1(NULL),
+	UFOPawn2(NULL),
+	Package(NULL),
+	UFOSpeed(1000),
+	UFO1XAxisInstance(0.f),
+	UFO1YAxisInstance(0.f),
+	UFO2XAxisInstance(0.f),
+	UFO2YAxisInstance(0.f)
+{
+
+}
 void AUFO1Controller::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("UFO1Controller Class"));
-	
 	
 	FVector location = FVector(370.f, -550.f, 50.f);
 	FRotator rotate = FRotator(0.f, 0.f, 0.f);
 	FActorSpawnParameters SpawnInfo;
-	ufoPawn1 = GetWorld()->SpawnActor<APlayerUFO>(APlayerUFO::StaticClass(), location, rotate, SpawnInfo);
+	UFOPawn1 = GetWorld()->SpawnActor<APlayerUFO>(APlayerUFO::StaticClass(), location, rotate, SpawnInfo);
 
 	location = FVector(370.f, 750.f, 50.f);
-	ufoPawn2 = GetWorld()->SpawnActor<APlayerUFO>(APlayerUFO::StaticClass(), location, rotate, SpawnInfo);
+	UFOPawn2 = GetWorld()->SpawnActor<APlayerUFO>(APlayerUFO::StaticClass(), location, rotate, SpawnInfo);
+	
+	
+
 }
 
 
@@ -24,14 +38,49 @@ void AUFO1Controller::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
 
-	if (ufoPawn1 != NULL)
+	if (UFOPawn1 != NULL)
 	{
-		ufoPawn1->MoveUFO();
+		//UFOPawn1->MoveUFO();
+		FVector PackageLocation = GetPawn()->GetActorLocation();
+		if (UFOPawn1->CalculateMovement(GetPawn() , PackageLocation))
+		{
+			UFOPawn1->MoveUFO();
+
+		}
+		else
+		{
+			UFOPawn1->ApplyForceToUFO(UFO2XAxisInstance, UFO2YAxisInstance);
+		}
+		
+		//else
+		//{
+		//	const FVector MoveDirection = FVector(UFOPawn1->YAxisValueUFO, UFOPawn1->XAxisValueUFO, 0.f).GetClampedToMaxSize(1.0f);
+		//	UE_LOG(LogTemp, Warning, TEXT("UFOPawn1->YAxisValueUFO %f UFOPawn1->XAxisValueUFO %f"), UFOPawn1->XAxisValueUFO, UFOPawn1->YAxisValueUFO);
+		//	const FVector Movement = MoveDirection * UFOSpeed * GetWorld()->DeltaTimeSeconds;
+
+		//	if (Movement.SizeSquared() > 0.0f)
+		//	{
+		//		// calculate rotation
+		//		const FRotator NewRotation = Movement.Rotation();
+		//		// move player UFO
+		//		RootComponent->MoveComponent(Movement, NewRotation, false);
+		//		
+		//		UE_LOG(LogTemp, Warning, TEXT("Movement.X %f Movement.Y %f"), Movement.X, Movement.Y);
+		//	}
+		//}
 	}
 
-	if (ufoPawn2 != NULL)
+	if (UFOPawn2 != NULL)
 	{
-		ufoPawn2->MoveUFO();
+		FVector PackageLocation = GetPawn()->GetActorLocation();
+		if (UFOPawn2->CalculateMovement(GetPawn(), PackageLocation))
+		{
+			UFOPawn2->MoveUFO();
+		}
+		else
+		{
+			UFOPawn2->ApplyForceToUFO(UFO1XAxisInstance, UFO1YAxisInstance, GetPawn());
+		}
 	}
 	
 }
@@ -49,34 +98,36 @@ void AUFO1Controller::SetupInputComponent()
 
 void AUFO1Controller::MoveUFO1X(float Force)
 {
-	if (ufoPawn1 != NULL)
+	if (UFOPawn1 != NULL)
 	{
-		
-		ufoPawn1->SetX(Force);
+		UFOPawn1->SetX(Force);
+		UFO1XAxisInstance = Force;
 	}
 }
 
 void AUFO1Controller::MoveUFO1Y(float Force)
 {
-	if (ufoPawn1 != NULL)
+	if (UFOPawn1 != NULL)
 	{
-		ufoPawn1->SetY(Force);
+		UFOPawn1->SetY(Force);
+		UFO1YAxisInstance = Force;
 	}
 }
 
 void AUFO1Controller::MoveUFO2X(float Force)
 {
-	if (ufoPawn2 != NULL)
+	if (UFOPawn2 != NULL)
 	{
-
-		ufoPawn2->SetX(Force);
+		UFOPawn2->SetX(Force);
+		UFO2XAxisInstance = Force;
 	}
 }
 
 void AUFO1Controller::MoveUFO2Y(float Force)
 {
-	if (ufoPawn2 != NULL)
+	if (UFOPawn2 != NULL)
 	{
-		ufoPawn2->SetY(Force);
+		UFOPawn2->SetY(Force);
+		UFO2YAxisInstance = Force;
 	}
 }

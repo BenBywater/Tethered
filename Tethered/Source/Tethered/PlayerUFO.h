@@ -28,19 +28,25 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float UFOSpeed = 1000;
 
-	void MoveUFO();
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	float UFOLeash = 800;
 
-	static const FName XAxisMovementUFO1;
-	static const FName YAxisMovementUFO1;
-	static const FName XAxisMovementUFO2;
-	static const FName YAxisMovementUFO2;
+	void MoveUFO();
 
 	void SetX(float x);
 	void SetY(float y);
 
-private:
+	bool CalculateMovement(AActor* Package, FVector PackageLocation);
+
+	void ApplyForceToUFO(float XAxisForce, float YAxisForce, APawn* Package);
+
 	float XAxisValueUFO;
 	float YAxisValueUFO;
+private:
+
+
+	float HistoricXAxis;
+	float HistoricYAxis;
 
 	UStaticMeshComponent* UFOMeshComponent;
 };

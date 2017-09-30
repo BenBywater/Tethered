@@ -6,7 +6,6 @@
 #include "UFO1Controller.generated.h"
 
 class APlayerUFO;
-
 /**
  * 
  */
@@ -16,6 +15,7 @@ class TETHERED_API AUFO1Controller : public APlayerController
 	GENERATED_BODY()
 	
 public:
+	AUFO1Controller();
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
 	virtual void SetupInputComponent() override;
@@ -25,6 +25,12 @@ public:
 	void MoveUFO2Y(float Force);
 
 private:
-	APlayerUFO* ufoPawn1 = NULL;
-	APlayerUFO* ufoPawn2 = NULL;
+	APlayerUFO* UFOPawn1;
+	APlayerUFO* UFOPawn2;
+	AActor* Package;
+	float UFOSpeed;
+	float UFO1XAxisInstance;
+	float UFO1YAxisInstance;
+	float UFO2XAxisInstance;
+	float UFO2YAxisInstance;
 };
