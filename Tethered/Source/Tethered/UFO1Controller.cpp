@@ -28,9 +28,6 @@ void AUFO1Controller::BeginPlay()
 
 	location = FVector(370.f, 750.f, 50.f);
 	UFOPawn2 = GetWorld()->SpawnActor<APlayerUFO>(APlayerUFO::StaticClass(), location, rotate, SpawnInfo);
-	
-	
-
 }
 
 
@@ -40,34 +37,23 @@ void AUFO1Controller::Tick(float deltaTime)
 
 	if (UFOPawn1 != NULL)
 	{
-		//UFOPawn1->MoveUFO();
 		FVector PackageLocation = GetPawn()->GetActorLocation();
+		// if UFO is out of leash range
 		if (UFOPawn1->CalculateMovement(GetPawn() , PackageLocation))
 		{
 			UFOPawn1->MoveUFO();
 
 		}
-		else
+		// if UFO is out of leash range and not moving
+		else if (UFO1XAxisInstance == 0 && UFO1YAxisInstance == 0)
 		{
-			UFOPawn1->ApplyForceToUFO(UFO2XAxisInstance, UFO2YAxisInstance);
+			UFOPawn1->ApplyForceToUFO(UFO1XAxisInstance, UFO1YAxisInstance, GetPawn());
 		}
-		
-		//else
-		//{
-		//	const FVector MoveDirection = FVector(UFOPawn1->YAxisValueUFO, UFOPawn1->XAxisValueUFO, 0.f).GetClampedToMaxSize(1.0f);
-		//	UE_LOG(LogTemp, Warning, TEXT("UFOPawn1->YAxisValueUFO %f UFOPawn1->XAxisValueUFO %f"), UFOPawn1->XAxisValueUFO, UFOPawn1->YAxisValueUFO);
-		//	const FVector Movement = MoveDirection * UFOSpeed * GetWorld()->DeltaTimeSeconds;
-
-		//	if (Movement.SizeSquared() > 0.0f)
-		//	{
-		//		// calculate rotation
-		//		const FRotator NewRotation = Movement.Rotation();
-		//		// move player UFO
-		//		RootComponent->MoveComponent(Movement, NewRotation, false);
-		//		
-		//		UE_LOG(LogTemp, Warning, TEXT("Movement.X %f Movement.Y %f"), Movement.X, Movement.Y);
-		//	}
-		//}
+		// if UFO is out of leash but trying to come back
+		else if (UFOPawn1->ReturnToPackage(UFO1XAxisInstance, UFO1YAxisInstance, GetPawn()))
+		{
+			UFOPawn1->MoveUFO();
+		}
 	}
 
 	if (UFOPawn2 != NULL)
@@ -77,9 +63,13 @@ void AUFO1Controller::Tick(float deltaTime)
 		{
 			UFOPawn2->MoveUFO();
 		}
-		else
+		else if (UFO2XAxisInstance == 0 && UFO2YAxisInstance == 0)
 		{
-			UFOPawn2->ApplyForceToUFO(UFO1XAxisInstance, UFO1YAxisInstance, GetPawn());
+			UFOPawn2->ApplyForceToUFO(UFO2XAxisInstance, UFO2YAxisInstance, GetPawn());
+		}
+		else if (UFOPawn2->ReturnToPackage(UFO2XAxisInstance, UFO2YAxisInstance, GetPawn()))
+		{
+			UFOPawn2->MoveUFO();
 		}
 	}
 	

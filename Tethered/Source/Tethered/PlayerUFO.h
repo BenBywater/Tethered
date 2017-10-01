@@ -40,6 +40,8 @@ public:
 
 	void ApplyForceToUFO(float XAxisForce, float YAxisForce, APawn* Package);
 
+	bool ReturnToPackage(float XAxisForce, float YAxisForce, APawn* Package);
+
 	float XAxisValueUFO;
 	float YAxisValueUFO;
 private:
@@ -49,4 +51,6 @@ private:
 	float HistoricYAxis;
 
 	UStaticMeshComponent* UFOMeshComponent;
+	UMaterial* UFOMaterial;
+	UMaterialInstanceDynamic* Material_Dyn;
 };

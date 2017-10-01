@@ -23,6 +23,7 @@ AUFOPackage::AUFOPackage():
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> PackageMesh(TEXT("/Game/Geometry/Meshes/1M_Cube"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("/Game/UFO/Blue"));
 	// Create the mesh component
 	PackageComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Package"));
 	RootComponent = PackageComponent;
@@ -95,6 +96,7 @@ void AUFOPackage::MovePackage()
 	float Distance = 0;
 	FVector UFOLocation;
 	// Get furthest UFO Location
+	
 	if (DistanceUFO1 > DistanceUFO2)
 	{
 		UFOLocation = UFO1->GetActorLocation();
@@ -103,14 +105,14 @@ void AUFOPackage::MovePackage()
 	else
 	{
 		UFOLocation = UFO2->GetActorLocation();
-     	Distance = DistanceUFO2;
+		Distance = DistanceUFO2;
 	}
 
 	if (Distance > UFOLeash)
 	{
 		FVector PackageLocation = GetActorLocation();
 		// Find difference between Package and UFO
-		FVector Difference = (UFOLocation - PackageLocation).GetClampedToSize2D(-120.f, 120.f);
+		FVector Difference = (UFOLocation - PackageLocation).GetClampedToSize2D(-200.f, 200.f);
 		PackageLocation += Difference;
 
 		// calculate rotation
@@ -118,6 +120,8 @@ void AUFOPackage::MovePackage()
 		// move player UFO
 		FLatentActionInfo LatentInfo;
 		LatentInfo.CallbackTarget = this;
-		UKismetSystemLibrary::MoveComponentTo(PackageComponent, PackageLocation, NewRotation, false, false, 0.2f, true, EMoveComponentAction::Type::Move, LatentInfo);
+		UKismetSystemLibrary::MoveComponentTo(PackageComponent, PackageLocation, NewRotation, false, false, 0.3f, true, EMoveComponentAction::Type::Move, LatentInfo);
 	}
+	
+	
 }
