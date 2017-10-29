@@ -27,6 +27,7 @@ APlayerUFO::APlayerUFO():
 	UFOMeshComponent->SetSimulatePhysics(true);
 	UFOMeshComponent->SetStaticMesh(UFOMesh.Object);
 	
+	// set mesh
 	if (Material.Object != NULL)
 	{
 		UFOMaterial = (UMaterial*)Material.Object;
@@ -77,10 +78,19 @@ void APlayerUFO::MoveUFO()
 	{
 		// calculate rotation
 		const FRotator NewRotation = Movement.Rotation();
+		FHitResult Hit(1.f);
 		// move player UFO
-		UFOMeshComponent->MoveComponent(Movement, NewRotation, false);
+		UFOMeshComponent->MoveComponent(Movement, NewRotation, true, &Hit);
 		HistoricXAxis = Movement.X;
 		HistoricYAxis = Movement.Y;
+
+		
+		if (Hit.IsValidBlockingHit())
+		{
+			const FVector Normal2D = Hit.Normal.GetSafeNormal2D();
+			const FVector Deflection = FVector::VectorPlaneProject(Movement, Normal2D) * (1.f - Hit.Time);
+			UFOMeshComponent->MoveComponent(Deflection, NewRotation, true);
+		}
 	}
 }
 
