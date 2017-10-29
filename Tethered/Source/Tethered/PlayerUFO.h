@@ -36,7 +36,7 @@ public:
 	void SetX(float x);
 	void SetY(float y);
 
-	bool CalculateMovement(AActor* Package, FVector PackageLocation);
+	bool CalculateMovement(AActor* Package);
 
 	void ApplyForceToUFO(float XAxisForce, float YAxisForce, APawn* Package);
 

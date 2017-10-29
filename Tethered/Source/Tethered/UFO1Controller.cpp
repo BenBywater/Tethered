@@ -41,7 +41,7 @@ void AUFO1Controller::Tick(float deltaTime)
 	{
 		FVector PackageLocation = GetPawn()->GetActorLocation();
 		// if UFO is out of leash range
-		if (UFOPawn1->CalculateMovement(GetPawn() , PackageLocation))
+		if (UFOPawn1->CalculateMovement(GetPawn()))
 		{
 			UFOPawn1->MoveUFO();
 
@@ -61,7 +61,7 @@ void AUFO1Controller::Tick(float deltaTime)
 	if (UFOPawn2 != NULL)
 	{
 		FVector PackageLocation = GetPawn()->GetActorLocation();
-		if (UFOPawn2->CalculateMovement(GetPawn(), PackageLocation))
+		if (UFOPawn2->CalculateMovement(GetPawn()))
 		{
 			UFOPawn2->MoveUFO();
 		}

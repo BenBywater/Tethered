@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tethered.h"
+#include "Projectile.h"
 #include <cmath> 
 #include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "PlayerUFO.h"
@@ -94,7 +95,7 @@ void APlayerUFO::MoveUFO()
 	}
 }
 
-bool APlayerUFO::CalculateMovement(AActor* Package, FVector PackageLocation)
+bool APlayerUFO::CalculateMovement(AActor* Package)
 {
 	if (Package != NULL)
 	{
@@ -152,5 +153,14 @@ bool APlayerUFO::ReturnToPackage(float XAxisForce, float YAxisForce, APawn* Pack
 
 void APlayerUFO:: ShootProjectile()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Shooting"));
+	const FRotator FireRotation = GetActorRotation();
+	FVector SpawnDistance = { 100, 0, 0 };
+	// Spawn projectile at an offset from this pawn
+	const FVector SpawnLocation = GetActorLocation() + SpawnDistance;
+
+	if (GetWorld() != NULL)
+	{
+		// spawn the projectile
+		GetWorld()->SpawnActor<AProjectile>(SpawnLocation, FireRotation);
+	}
 }
