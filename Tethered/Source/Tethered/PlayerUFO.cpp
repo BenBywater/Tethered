@@ -149,3 +149,8 @@ bool APlayerUFO::ReturnToPackage(float XAxisForce, float YAxisForce, APawn* Pack
 		return false;
 	}
 }
+
+void APlayerUFO:: ShootProjectile()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Shooting"));
+}

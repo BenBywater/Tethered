@@ -21,11 +21,13 @@ void AUFO1Controller::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Spawn UFO actor 1
 	FVector location = FVector(370.f, -550.f, 50.f);
 	FRotator rotate = FRotator(0.f, 0.f, 0.f);
 	FActorSpawnParameters SpawnInfo;
 	UFOPawn1 = GetWorld()->SpawnActor<APlayerUFO>(APlayerUFO::StaticClass(), location, rotate, SpawnInfo);
 
+	// Spawn UFO actor 2
 	location = FVector(370.f, 750.f, 50.f);
 	UFOPawn2 = GetWorld()->SpawnActor<APlayerUFO>(APlayerUFO::StaticClass(), location, rotate, SpawnInfo);
 }
@@ -84,6 +86,9 @@ void AUFO1Controller::SetupInputComponent()
 
 	InputComponent->BindAxis("XAxisMovementUFO2", this, &AUFO1Controller::MoveUFO2X);
 	InputComponent->BindAxis("YAxisMovementUFO2", this, &AUFO1Controller::MoveUFO2Y);
+
+	InputComponent->BindAction("FireProjectileUFO1", IE_Pressed, this, &AUFO1Controller::FireProjectileUFO1);
+	InputComponent->BindAction("FireProjectileUFO2", IE_Pressed, this, &AUFO1Controller::FireProjectileUFO2);
 }
 
 void AUFO1Controller::MoveUFO1X(float Force)
@@ -119,5 +124,21 @@ void AUFO1Controller::MoveUFO2Y(float Force)
 	{
 		UFOPawn2->SetY(Force);
 		UFO2YAxisInstance = Force;
+	}
+}
+
+void AUFO1Controller::FireProjectileUFO1()
+{
+	if (UFOPawn1 != NULL)
+	{
+		UFOPawn1->ShootProjectile();
+	}
+}
+
+void AUFO1Controller::FireProjectileUFO2()
+{
+	if (UFOPawn2 != NULL)
+	{
+		UFOPawn2->ShootProjectile();
 	}
 }

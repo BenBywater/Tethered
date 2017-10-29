@@ -42,6 +42,8 @@ public:
 
 	bool ReturnToPackage(float XAxisForce, float YAxisForce, APawn* Package);
 
+	void ShootProjectile();
+
 	float XAxisValueUFO;
 	float YAxisValueUFO;
 private:

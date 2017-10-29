@@ -23,6 +23,8 @@ public:
 	void MoveUFO1Y(float Force);
 	void MoveUFO2X(float Force);
 	void MoveUFO2Y(float Force);
+	void FireProjectileUFO1();
+	void FireProjectileUFO2();
 
 private:
 	APlayerUFO* UFOPawn1;
@@ -33,4 +35,6 @@ private:
 	float UFO1YAxisInstance;
 	float UFO2XAxisInstance;
 	float UFO2YAxisInstance;
+	bool UFO1Fire;
+	bool UFO2Fire;
 };

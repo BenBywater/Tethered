@@ -22,11 +22,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// function to handle projectile collision
+	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 private:
 
 	UStaticMeshComponent* ProjectileComponent;
 	
-	
+	UProjectileMovementComponent* ProjectileMovement;
 };
