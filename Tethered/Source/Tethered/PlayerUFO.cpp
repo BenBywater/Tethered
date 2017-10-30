@@ -156,7 +156,7 @@ void APlayerUFO:: ShootProjectile()
 	const FRotator FireRotation = GetActorRotation();
 	FVector SpawnDistance = { 100, 0, 0 };
 	// Spawn projectile at an offset from this pawn
-	const FVector SpawnLocation = GetActorLocation() + SpawnDistance;
+	const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(SpawnDistance);
 
 	if (GetWorld() != NULL)
 	{
