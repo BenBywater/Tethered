@@ -2,6 +2,7 @@
 
 #include "Tethered.h"
 #include "Projectile.h"
+#include "ProjectileRed.h"
 #include <cmath> 
 #include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "PlayerUFO.h"
@@ -161,6 +162,14 @@ void APlayerUFO:: ShootProjectile()
 	if (GetWorld() != NULL)
 	{
 		// spawn the projectile
-		GetWorld()->SpawnActor<AProjectile>(SpawnLocation, FireRotation);
+		if (GetName() == "PlayerUFO_0")
+		{
+			GetWorld()->SpawnActor<AProjectile>(SpawnLocation, FireRotation);
+		}
+		else
+		{
+			GetWorld()->SpawnActor<AProjectileRed>(SpawnLocation, FireRotation);
+		}
+		
 	}
 }
