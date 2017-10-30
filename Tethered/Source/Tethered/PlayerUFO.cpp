@@ -26,9 +26,8 @@ APlayerUFO::APlayerUFO():
 	// Create the mesh component
 	UFOMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UFO"));
 	RootComponent = UFOMeshComponent;
-	UFOMeshComponent->SetSimulatePhysics(true);
+	UFOMeshComponent->SetSimulatePhysics(false);
 	UFOMeshComponent->SetStaticMesh(UFOMesh.Object);
-	
 	// set mesh
 	if (Material.Object != NULL)
 	{
@@ -49,6 +48,10 @@ void APlayerUFO::BeginPlay()
 void APlayerUFO::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	/*FRotator NewRotation = GetActorRotation();
+	NewRotation.Roll = 0.f;
+	NewRotation.Pitch = 0.f;
+	UFOMeshComponent->SetRelativeRotation(NewRotation, false, NULL, ETeleportType::None);*/
 }
 
 // Called to bind functionality to input
@@ -74,7 +77,7 @@ void APlayerUFO::MoveUFO()
 
 	// Calculate movement based on direction, speed of player and frame rate dependancy
 	const FVector Movement = MoveDirection * UFOSpeed * GetWorld()->DeltaTimeSeconds;
-	//UE_LOG(LogTemp, Warning, TEXT("Movement.X %f, Movement.Y %f"), Movement.X, Movement.Y);
+
 	// If player is moving
 	if (Movement.SizeSquared() > 0.0f)
 	{
