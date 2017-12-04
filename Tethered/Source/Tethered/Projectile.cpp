@@ -57,7 +57,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL) && OtherComponent->IsSimulatingPhysics())
 	{
-		OtherComponent->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
+		OtherComponent->AddImpulseAtLocation(GetVelocity() * 80.0f, GetActorLocation());
 	}
 
 	Destroy();
